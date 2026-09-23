@@ -108,7 +108,6 @@ const toggleReadMore = (taskId) => {
                         <input
                             @change="toggleTask(task)"
                             type="checkbox"
-                            value=""
                             class="sr-only peer"
                             :checked="task.done === 1"
                         />
@@ -138,7 +137,7 @@ const toggleReadMore = (taskId) => {
                     <button
                         v-if="task.task_info && task.task_info.length > 100"
                         @click="toggleReadMore(task.id)"
-                        class="text-blue-500 text-sm mt-1 focus:outline-none hover:underline"
+                        class="text-primary text-sm mt-1 cursor-pointer"
                     >
                         {{
                             expandedTasks[task.id]

@@ -1,16 +1,15 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
-import { ref ,watch} from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
+
 const props = defineProps({ type: String });
 const selectedFilter = ref(props?.type || "all");
-const page = usePage();
 const filterTasks = (type) => {
 
     router.get(
         "/dashboard",
         {
-            filter: type, // ترسل نوع الفلتر (مثلاً: done, not_done, important...)
+            filter: type, 
         },
         {
             preserveScroll: true,
