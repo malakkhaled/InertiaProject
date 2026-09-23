@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin "flowbite/plugin";
+
+
+@theme{
+    --color-primary: #fdbc00;
+}
