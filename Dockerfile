@@ -19,7 +19,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# تثبيت الحزم، مفتاح التطبيق، إنشاء ملف SQLite، وتنشيط الجداول (Migrations)
+# تثبيت الحزم، مفتاح التطبيق، وإعداد قاعدة بيانات SQLite والجداول
 RUN composer install --no-dev --optimize-autoloader
 RUN cp .env.example .env || true
 RUN php artisan key:generate
