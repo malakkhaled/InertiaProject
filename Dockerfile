@@ -19,14 +19,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# تثبيت الحزم وتوليد مفتاح التطبيق
+# تثبيت الحزم، مفتاح التطبيق، وإنشاء ملف SQLite فارغ
 RUN composer install --no-dev --optimize-autoloader
 RUN cp .env.example .env || true
 RUN php artisan key:generate
+RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
 
-# صلاحيات مجلدات لاراغيل
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# صلاحيات مجلدات لاراغيل وتاكيد صلاحية قاعدة البيانات
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
+    && chmod 664 /var/www/html/database/database.sqlite
 
 # تعديل مسار Apache ليشير إلى public
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
