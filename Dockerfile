@@ -19,11 +19,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# تشغيل Composer لتنزيل المكتبات (autoload وغيرها)
+# تثبيت الحزم وتوليد مفتاح التطبيق
 RUN composer install --no-dev --optimize-autoloader
+RUN cp .env.example .env || true
+RUN php artisan key:generate
 
-# صلاحيات ومجلدات لاراغيل
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# صلاحيات مجلدات لاراغيل
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # تعديل مسار Apache ليشير إلى public
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
