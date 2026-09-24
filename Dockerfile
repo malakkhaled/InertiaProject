@@ -19,6 +19,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
+# تشغيل Composer لتنزيل المكتبات (autoload وغيرها)
+RUN composer install --no-dev --optimize-autoloader
+
 # صلاحيات ومجلدات لاراغيل
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
