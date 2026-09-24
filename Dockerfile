@@ -19,13 +19,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# تثبيت الحزم، مفتاح التطبيق، وإنشاء ملف SQLite فارغ
+# تثبيت الحزم، مفتاح التطبيق، إنشاء ملف SQLite، وتنشيط الجداول (Migrations)
 RUN composer install --no-dev --optimize-autoloader
 RUN cp .env.example .env || true
 RUN php artisan key:generate
 RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
+RUN php artisan migrate --force
 
-# صلاحيات مجلدات لاراغيل وتاكيد صلاحية قاعدة البيانات
+# صلاحيات مجلدات لاراغيل وقاعدة البيانات
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
     && chmod 664 /var/www/html/database/database.sqlite
